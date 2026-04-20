@@ -12,21 +12,6 @@ import {
   rankLeaders,
 } from '../data/types'
 
-const RANK_BADGE_TEST_IDS: string[] = [
-  'rank-badge-strength-max',
-  'rank-badge-strength-min',
-  'rank-badge-half-damage-max',
-  'rank-badge-half-damage-min',
-  'rank-badge-no-effect-max',
-  'rank-badge-no-effect-min',
-  'rank-badge-weakness-max',
-  'rank-badge-weakness-min',
-  'rank-badge-resist-max',
-  'rank-badge-resist-min',
-  'rank-badge-immune-max',
-  'rank-badge-immune-min',
-]
-
 function renderWithRouter(initialEntries: string[]): void {
   render(
     <MemoryRouter initialEntries={initialEntries}>
@@ -107,97 +92,65 @@ describe('TypeChart list page', () => {
     expect(within(fireCard).queryByTestId('defense-score')).toBeNull()
   })
 
-  it('type-card shows max and min rank badges', () => {
+  it('type-card renders aggregated positive and negative rank badges', () => {
     renderWithRouter(['/type-chart'])
 
     const fightingCard: HTMLElement = document.querySelector(
       '[data-testid="type-card"][data-type="fighting"]',
     ) as HTMLElement
     expect(fightingCard).not.toBeNull()
-    expect(within(fightingCard).getByTestId('rank-badge-strength-max')).toBeInTheDocument()
-    expect(within(fightingCard).getByTestId('rank-badge-no-effect-max')).toBeInTheDocument()
+    const fightingPositive: HTMLElement = within(fightingCard).getByTestId('rank-badge-positive')
+    expect(fightingPositive.textContent).toContain('👍')
+    expect(fightingPositive.textContent).toContain('강점↑')
+    const fightingNegative: HTMLElement = within(fightingCard).getByTestId('rank-badge-negative')
+    expect(fightingNegative.textContent).toContain('👎')
+    expect(fightingNegative.textContent).toContain('무효↑')
 
     const normalCard: HTMLElement = document.querySelector(
       '[data-testid="type-card"][data-type="normal"]',
     ) as HTMLElement
     expect(normalCard).not.toBeNull()
-    expect(within(normalCard).getByTestId('rank-badge-strength-min')).toBeInTheDocument()
-    expect(within(normalCard).getByTestId('rank-badge-no-effect-max')).toBeInTheDocument()
-    expect(within(normalCard).getByTestId('rank-badge-weakness-min')).toBeInTheDocument()
-    expect(within(normalCard).getByTestId('rank-badge-resist-min')).toBeInTheDocument()
+    const normalPositive: HTMLElement = within(normalCard).getByTestId('rank-badge-positive')
+    expect(normalPositive.textContent).toContain('👍')
+    expect(normalPositive.textContent).toContain('약점↓')
+    const normalNegative: HTMLElement = within(normalCard).getByTestId('rank-badge-negative')
+    expect(normalNegative.textContent).toContain('👎')
+    expect(normalNegative.textContent).toContain('강점↓')
+    expect(normalNegative.textContent).toContain('무효↑')
+    expect(normalNegative.textContent).toContain('저항↓')
+    expect(normalNegative.textContent).toContain(', ')
 
     const steelCard: HTMLElement = document.querySelector(
       '[data-testid="type-card"][data-type="steel"]',
     ) as HTMLElement
     expect(steelCard).not.toBeNull()
-    expect(within(steelCard).getByTestId('rank-badge-resist-max')).toBeInTheDocument()
-    expect(within(steelCard).getByTestId('rank-badge-no-effect-min')).toBeInTheDocument()
+    const steelPositive: HTMLElement = within(steelCard).getByTestId('rank-badge-positive')
+    expect(steelPositive.textContent).toContain('저항↑')
+    expect(steelPositive.textContent).toContain('무효↓')
 
     const ghostCard: HTMLElement = document.querySelector(
       '[data-testid="type-card"][data-type="ghost"]',
     ) as HTMLElement
     expect(ghostCard).not.toBeNull()
-    expect(within(ghostCard).getByTestId('rank-badge-no-effect-max')).toBeInTheDocument()
-    expect(within(ghostCard).getByTestId('rank-badge-immune-max')).toBeInTheDocument()
-    expect(within(ghostCard).getByTestId('rank-badge-half-damage-min')).toBeInTheDocument()
+    const ghostPositive: HTMLElement = within(ghostCard).getByTestId('rank-badge-positive')
+    expect(ghostPositive.textContent).toContain('반감↓')
+    expect(ghostPositive.textContent).toContain('무효↓')
+    expect(ghostPositive.textContent).toContain('면역↑')
 
     const grassCard: HTMLElement = document.querySelector(
       '[data-testid="type-card"][data-type="grass"]',
     ) as HTMLElement
     expect(grassCard).not.toBeNull()
-    expect(within(grassCard).getByTestId('rank-badge-half-damage-max')).toBeInTheDocument()
-    expect(within(grassCard).getByTestId('rank-badge-weakness-max')).toBeInTheDocument()
-    expect(within(grassCard).getByTestId('rank-badge-no-effect-min')).toBeInTheDocument()
+    const grassNegative: HTMLElement = within(grassCard).getByTestId('rank-badge-negative')
+    expect(grassNegative.textContent).toContain('반감↑')
+    expect(grassNegative.textContent).toContain('약점↑')
 
     const fireCard: HTMLElement = document.querySelector(
       '[data-testid="type-card"][data-type="fire"]',
     ) as HTMLElement
     expect(fireCard).not.toBeNull()
-    expect(within(fireCard).getByTestId('rank-badge-no-effect-min')).toBeInTheDocument()
-  })
-
-  it('type-card labels include thumbs emoji by direction', () => {
-    renderWithRouter(['/type-chart'])
-
-    const fightingCard: HTMLElement = document.querySelector(
-      '[data-testid="type-card"][data-type="fighting"]',
-    ) as HTMLElement
-    expect(fightingCard).not.toBeNull()
-    expect(
-      within(fightingCard).getByTestId('rank-badge-strength-max').textContent,
-    ).toContain('👍')
-
-    const ghostCard: HTMLElement = document.querySelector(
-      '[data-testid="type-card"][data-type="ghost"]',
-    ) as HTMLElement
-    expect(ghostCard).not.toBeNull()
-    expect(
-      within(ghostCard).getByTestId('rank-badge-immune-max').textContent,
-    ).toContain('👍')
-
-    const normalCard: HTMLElement = document.querySelector(
-      '[data-testid="type-card"][data-type="normal"]',
-    ) as HTMLElement
-    expect(normalCard).not.toBeNull()
-    expect(
-      within(normalCard).getByTestId('rank-badge-weakness-min').textContent,
-    ).toContain('👍')
-
-    expect(
-      within(normalCard).getByTestId('rank-badge-strength-min').textContent,
-    ).toContain('👎')
-
-    const grassCard: HTMLElement = document.querySelector(
-      '[data-testid="type-card"][data-type="grass"]',
-    ) as HTMLElement
-    expect(grassCard).not.toBeNull()
-    expect(
-      within(grassCard).getByTestId('rank-badge-half-damage-max').textContent,
-    ).toContain('👎')
-
-    expect(
-      within(normalCard).getByTestId('rank-badge-resist-min').textContent,
-    ).toContain('👎')
+    const firePositive: HTMLElement = within(fireCard).getByTestId('rank-badge-positive')
+    expect(firePositive.textContent).toContain('무효↓')
   })
 
   it('type-chart grid has auto-rows-fr', () => {
@@ -378,14 +331,16 @@ describe('TypeChart detail page', () => {
     expect(screen.getByTestId('detail-defense-score').textContent).toContain('-2')
   })
 
-  it('detail header shows max and min rank badges', () => {
+  it('detail header renders aggregated positive and negative rank badges', () => {
     const steelRender = render(
       <MemoryRouter initialEntries={['/type-chart/steel']}>
         <App />
       </MemoryRouter>,
     )
-    expect(screen.getByTestId('rank-badge-resist-max')).toBeInTheDocument()
-    expect(screen.getByTestId('rank-badge-no-effect-min')).toBeInTheDocument()
+    const steelPositive: HTMLElement = screen.getByTestId('rank-badge-positive')
+    expect(steelPositive.textContent).toContain('👍')
+    expect(steelPositive.textContent).toContain('저항↑')
+    expect(steelPositive.textContent).toContain('무효↓')
     steelRender.unmount()
 
     const ghostRender = render(
@@ -393,9 +348,10 @@ describe('TypeChart detail page', () => {
         <App />
       </MemoryRouter>,
     )
-    expect(screen.getByTestId('rank-badge-no-effect-max')).toBeInTheDocument()
-    expect(screen.getByTestId('rank-badge-immune-max')).toBeInTheDocument()
-    expect(screen.getByTestId('rank-badge-half-damage-min')).toBeInTheDocument()
+    const ghostPositive: HTMLElement = screen.getByTestId('rank-badge-positive')
+    expect(ghostPositive.textContent).toContain('반감↓')
+    expect(ghostPositive.textContent).toContain('무효↓')
+    expect(ghostPositive.textContent).toContain('면역↑')
     ghostRender.unmount()
 
     render(
@@ -403,10 +359,12 @@ describe('TypeChart detail page', () => {
         <App />
       </MemoryRouter>,
     )
-    expect(screen.getByTestId('rank-badge-strength-min')).toBeInTheDocument()
-    expect(screen.getByTestId('rank-badge-weakness-min')).toBeInTheDocument()
-    expect(screen.getByTestId('rank-badge-resist-min')).toBeInTheDocument()
-    expect(screen.getByTestId('rank-badge-no-effect-max')).toBeInTheDocument()
+    const normalPositive: HTMLElement = screen.getByTestId('rank-badge-positive')
+    expect(normalPositive.textContent).toContain('약점↓')
+    const normalNegative: HTMLElement = screen.getByTestId('rank-badge-negative')
+    expect(normalNegative.textContent).toContain('강점↓')
+    expect(normalNegative.textContent).toContain('무효↑')
+    expect(normalNegative.textContent).toContain('저항↓')
   })
 })
 

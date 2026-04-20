@@ -1,37 +1,16 @@
 import { Link } from 'react-router-dom'
-import type { TypeId, TypeInfo } from '../data/types'
-import { rankLeaders } from '../data/types'
+import type { TypeInfo } from '../data/types'
+import { POSITIVE_CATEGORIES, NEGATIVE_CATEGORIES, collectLabels } from '../data/rankCategories'
 import { TYPE_BG } from '../data/typeColors'
 
 interface TypeCardProps {
   type: TypeInfo
 }
 
-const LEADERS = rankLeaders()
-
-interface RankBadgeSpec {
-  testId: string
-  ids: TypeId[]
-  label: string
-}
-
-const BADGE_SPECS: RankBadgeSpec[] = [
-  { testId: 'rank-badge-strength-max', ids: LEADERS.strength.max, label: '👍 강점 최다' },
-  { testId: 'rank-badge-strength-min', ids: LEADERS.strength.min, label: '👎 강점 최소' },
-  { testId: 'rank-badge-half-damage-max', ids: LEADERS.halfDamage.max, label: '👎 반감 최다' },
-  { testId: 'rank-badge-half-damage-min', ids: LEADERS.halfDamage.min, label: '👍 반감 최소' },
-  { testId: 'rank-badge-no-effect-max', ids: LEADERS.noEffect.max, label: '👎 무효 최다' },
-  { testId: 'rank-badge-no-effect-min', ids: LEADERS.noEffect.min, label: '👍 무효 최소' },
-  { testId: 'rank-badge-weakness-max', ids: LEADERS.weakness.max, label: '👎 약점 최다' },
-  { testId: 'rank-badge-weakness-min', ids: LEADERS.weakness.min, label: '👍 약점 최소' },
-  { testId: 'rank-badge-resist-max', ids: LEADERS.resist.max, label: '👍 저항 최다' },
-  { testId: 'rank-badge-resist-min', ids: LEADERS.resist.min, label: '👎 저항 최소' },
-  { testId: 'rank-badge-immune-max', ids: LEADERS.immune.max, label: '👍 면역 최다' },
-  { testId: 'rank-badge-immune-min', ids: LEADERS.immune.min, label: '👎 면역 최소' },
-]
-
 function TypeCard({ type }: TypeCardProps) {
   const id = type.id
+  const positiveLabels: string[] = collectLabels(POSITIVE_CATEGORIES, id)
+  const negativeLabels: string[] = collectLabels(NEGATIVE_CATEGORIES, id)
   return (
     <div data-testid="type-card" data-type={id}>
       <Link
@@ -47,17 +26,22 @@ function TypeCard({ type }: TypeCardProps) {
         </div>
         <span className="text-sm font-medium">{type.nameKo}</span>
         <div data-testid="rank-badge-container" className="mt-auto flex flex-wrap justify-center gap-1">
-          {BADGE_SPECS.map((spec) =>
-            spec.ids.includes(id) ? (
-              <span
-                key={spec.testId}
-                data-testid={spec.testId}
-                className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-1.5 py-0.5 text-[10px] text-[var(--text-muted)]"
-              >
-                {spec.label}
-              </span>
-            ) : null,
-          )}
+          {positiveLabels.length > 0 ? (
+            <span
+              data-testid="rank-badge-positive"
+              className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-1.5 py-0.5 text-[10px] text-[var(--text-muted)]"
+            >
+              {`👍 ${positiveLabels.join(', ')}`}
+            </span>
+          ) : null}
+          {negativeLabels.length > 0 ? (
+            <span
+              data-testid="rank-badge-negative"
+              className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-1.5 py-0.5 text-[10px] text-[var(--text-muted)]"
+            >
+              {`👎 ${negativeLabels.join(', ')}`}
+            </span>
+          ) : null}
         </div>
       </Link>
     </div>

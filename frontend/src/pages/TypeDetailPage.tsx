@@ -1,30 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import type { TypeId } from '../data/types'
-import { TYPES, TYPE_ORDER, offenseScore, defenseScore, rankLeaders } from '../data/types'
+import { TYPES, TYPE_ORDER, offenseScore, defenseScore } from '../data/types'
+import { POSITIVE_CATEGORIES, NEGATIVE_CATEGORIES, collectLabels } from '../data/rankCategories'
 import { TYPE_BG, typeFg } from '../data/typeColors'
-
-const LEADERS = rankLeaders()
-
-interface RankBadgeSpec {
-  testId: string
-  ids: TypeId[]
-  label: string
-}
-
-const BADGE_SPECS: RankBadgeSpec[] = [
-  { testId: 'rank-badge-strength-max', ids: LEADERS.strength.max, label: '👍 강점 최다' },
-  { testId: 'rank-badge-strength-min', ids: LEADERS.strength.min, label: '👎 강점 최소' },
-  { testId: 'rank-badge-half-damage-max', ids: LEADERS.halfDamage.max, label: '👎 반감 최다' },
-  { testId: 'rank-badge-half-damage-min', ids: LEADERS.halfDamage.min, label: '👍 반감 최소' },
-  { testId: 'rank-badge-no-effect-max', ids: LEADERS.noEffect.max, label: '👎 무효 최다' },
-  { testId: 'rank-badge-no-effect-min', ids: LEADERS.noEffect.min, label: '👍 무효 최소' },
-  { testId: 'rank-badge-weakness-max', ids: LEADERS.weakness.max, label: '👎 약점 최다' },
-  { testId: 'rank-badge-weakness-min', ids: LEADERS.weakness.min, label: '👍 약점 최소' },
-  { testId: 'rank-badge-resist-max', ids: LEADERS.resist.max, label: '👍 저항 최다' },
-  { testId: 'rank-badge-resist-min', ids: LEADERS.resist.min, label: '👎 저항 최소' },
-  { testId: 'rank-badge-immune-max', ids: LEADERS.immune.max, label: '👍 면역 최다' },
-  { testId: 'rank-badge-immune-min', ids: LEADERS.immune.min, label: '👎 면역 최소' },
-]
 
 function isTypeId(value: string | undefined): value is TypeId {
   return typeof value === 'string' && (TYPE_ORDER as readonly string[]).includes(value)
@@ -88,6 +66,8 @@ function TypeDetailPage() {
   }
 
   const type = TYPES[typeId]
+  const positiveLabels: string[] = collectLabels(POSITIVE_CATEGORIES, typeId)
+  const negativeLabels: string[] = collectLabels(NEGATIVE_CATEGORIES, typeId)
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -104,18 +84,23 @@ function TypeDetailPage() {
             <span data-testid="detail-offense-score">공 {String(offenseScore(typeId))}</span>
             <span data-testid="detail-defense-score">방 {String(defenseScore(typeId))}</span>
           </div>
-          <div className="mt-1 flex flex-wrap gap-1">
-            {BADGE_SPECS.map((spec) =>
-              spec.ids.includes(typeId) ? (
-                <span
-                  key={spec.testId}
-                  data-testid={spec.testId}
-                  className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-2 py-0.5 text-xs text-[var(--text-muted)]"
-                >
-                  {spec.label}
-                </span>
-              ) : null,
-            )}
+          <div data-testid="rank-badge-container" className="mt-1 flex flex-wrap gap-1">
+            {positiveLabels.length > 0 ? (
+              <span
+                data-testid="rank-badge-positive"
+                className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-2 py-0.5 text-xs text-[var(--text-muted)]"
+              >
+                {`👍 ${positiveLabels.join(', ')}`}
+              </span>
+            ) : null}
+            {negativeLabels.length > 0 ? (
+              <span
+                data-testid="rank-badge-negative"
+                className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-2 py-0.5 text-xs text-[var(--text-muted)]"
+              >
+                {`👎 ${negativeLabels.join(', ')}`}
+              </span>
+            ) : null}
           </div>
         </div>
       </header>
