@@ -149,8 +149,7 @@ describe('TypeChart list page', () => {
       '[data-testid="type-card"][data-type="fire"]',
     ) as HTMLElement
     expect(fireCard).not.toBeNull()
-    const firePositive: HTMLElement = within(fireCard).getByTestId('rank-badge-positive')
-    expect(firePositive.textContent).toContain('무효↓')
+    expect(within(fireCard).queryByTestId('rank-badge-positive')).toBeNull()
   })
 
   it('type-chart grid has auto-rows-fr', () => {
@@ -461,7 +460,7 @@ describe('rankLeaders helper', () => {
   it('immune max and min', () => {
     expect(rankLeaders().immune.max).toEqual(['ghost'])
     expect(rankLeaders().immune.min).toEqual([
-      'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison', 'flying',
+      'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison',
       'psychic', 'bug', 'rock', 'dragon',
     ])
   })

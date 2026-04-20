@@ -9,7 +9,7 @@ export interface CategorySpec {
 }
 
 const NO_EFFECT_POSITIVE: TypeId[] = TYPE_ORDER.filter(
-  (id) => TYPES[id].offense.noEffect.length === 0 || TYPES[id].defense.immuneTo.length > 0,
+  (id) => TYPES[id].defense.immuneTo.length > 0,
 )
 
 export const POSITIVE_CATEGORIES: CategorySpec[] = [
