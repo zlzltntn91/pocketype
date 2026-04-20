@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/zlamstn/Documents/tutorial-hannes/.claude/hooks/session-end.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
