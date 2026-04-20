@@ -19,3 +19,8 @@ build/
 # Claude Code local artifacts
 .claude/logs/
 .claude/settings.local.json
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
