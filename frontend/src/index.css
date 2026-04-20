@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --surface-2: #F4F4F5;
+  --border: #E5E7EB;
+  --text: #111827;
+  --text-muted: #6B7280;
+  --accent: #2563EB;
+  --accent-contrast: #FFFFFF;
+  --danger: #DC2626;
+  --danger-contrast: #FFFFFF;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B0D12;
+    --surface: #151821;
+    --surface-2: #1E222D;
+    --border: #2A2F3A;
+    --text: #F3F4F6;
+    --text-muted: #9CA3AF;
+    --accent: #60A5FA;
+    --accent-contrast: #0B0D12;
+    --danger: #F87171;
+    --danger-contrast: #0B0D12;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0B0D12;
+  --surface: #151821;
+  --surface-2: #1E222D;
+  --border: #2A2F3A;
+  --text: #F3F4F6;
+  --text-muted: #9CA3AF;
+  --accent: #60A5FA;
+  --accent-contrast: #0B0D12;
+  --danger: #F87171;
+  --danger-contrast: #0B0D12;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans KR", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
