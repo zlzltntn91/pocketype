@@ -93,3 +93,13 @@
  M frontend/src/components/TypeCard.tsx
  M frontend/src/pages/TypeDetailPage.tsx
  M frontend/vite.config.ts
+
+## Session 2026-04-20 17:43
+
+### Modified files
+ M .claude/learnings.md
+
+## Session 2026-04-20 17:43
+
+### Modified files
+ M .claude/learnings.md
